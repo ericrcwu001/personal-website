@@ -1,0 +1,13 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "installCommand": "npm install --prefix web",
+  "buildCommand": "npm run build --prefix web",
+  "outputDirectory": "web/dist",
+  "rewrites": [{ "source": "/projects/:slug", "destination": "/index.html" }],
+  "headers": [
+    {
+      "source": "/media/intro/(.*)",
+      "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }]
+    }
+  ]
+}
