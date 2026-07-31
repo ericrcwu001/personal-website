@@ -1,0 +1,5 @@
+{
+  "name": "personal-website-tools",
+  "private": true,
+  "description": "Repo-local tooling for Personal_Website. Higgsfield is used via its MCP server (.mcp.json), not the CLI."
+}

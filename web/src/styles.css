@@ -1,0 +1,591 @@
+:root {
+  color-scheme: dark;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  --ink: #151617;
+  --ink-raised: #1d1e1f;
+  --paper: #f0ede7;
+  --paper-muted: rgba(240, 237, 231, 0.68);
+  --line: rgba(240, 237, 231, 0.18);
+  --accent: #d89b6b;
+  --serif: "New York", "New York Small", "Iowan Old Style", Georgia, serif;
+  background: var(--ink);
+  color: var(--paper);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  min-width: 320px;
+  background: var(--ink);
+  scroll-behavior: auto;
+}
+
+body {
+  min-width: 320px;
+  min-height: 100dvh;
+  margin: 0;
+  overflow-x: clip;
+  background: var(--ink);
+}
+
+body::after {
+  position: fixed;
+  z-index: 90;
+  inset: 0;
+  background-image: repeating-radial-gradient(circle at 25% 20%, rgba(255, 255, 255, 0.035) 0 0.55px, transparent 0.8px 3px);
+  content: "";
+  opacity: 0.24;
+  pointer-events: none;
+}
+
+a {
+  color: inherit;
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 5px;
+}
+
+.site-nav {
+  position: fixed;
+  z-index: 80;
+  top: 0;
+  left: 0;
+  display: flex;
+  width: 100%;
+  min-height: 68px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 3.2vw;
+  background: linear-gradient(180deg, rgba(12, 13, 14, 0.52), transparent);
+  font-size: 0.82rem;
+  letter-spacing: 0.015em;
+  pointer-events: none;
+}
+
+.site-nav a {
+  text-decoration: none;
+  pointer-events: auto;
+}
+
+.wordmark {
+  font-family: var(--serif);
+  font-size: 1.06rem;
+  letter-spacing: -0.02em;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: clamp(1.1rem, 2.4vw, 2.5rem);
+}
+
+.nav-links a {
+  color: var(--paper-muted);
+  transition: color 180ms ease;
+}
+
+.nav-links a:hover,
+.nav-links a:focus-visible {
+  color: var(--paper);
+}
+
+/* Runway length sets the scroll-to-film gearing: taller runway = less film per
+   scroll. 1200dvh over a 29s master is ~41dvh per film-second. */
+.cinematic-runway {
+  position: relative;
+  height: 1200dvh;
+  background: var(--ink);
+}
+
+.cinematic-stage {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  min-height: 100dvh;
+  overflow: clip;
+  isolation: isolate;
+  background: #7795a6;
+  perspective: 1300px;
+}
+
+.scene-loader {
+  position: absolute;
+  z-index: 100;
+  inset: 0;
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: 0.65rem;
+  background: var(--ink);
+  transition: visibility 600ms step-end, opacity 600ms ease;
+}
+
+.scene-loader span {
+  font-family: var(--serif);
+  font-size: clamp(2.6rem, 6vw, 5rem);
+  letter-spacing: -0.045em;
+}
+
+.scene-loader small {
+  min-height: 1em;
+  color: var(--paper-muted);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.scene-loader.is-ready {
+  visibility: hidden;
+  opacity: 0;
+}
+
+.world-environment,
+.work-veil {
+  position: absolute;
+  inset: 0;
+}
+
+.world-environment {
+  z-index: 2;
+  overflow: hidden;
+  background: #7a8d96;
+  pointer-events: none;
+}
+
+.world-canvas {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.intro-film,
+.intro-film-poster {
+  position: absolute;
+  inset: 0;
+}
+
+.intro-film-video {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Covers the first paint while the film's metadata loads and the first seek
+   lands, so the hero never flashes the stage background. */
+.intro-film-poster {
+  z-index: 1;
+  background: url("/media/intro/intro-poster.jpg") center / cover no-repeat;
+}
+
+.world-canvas[data-webgl="unavailable"] {
+  background:
+    linear-gradient(180deg, rgba(20, 33, 43, 0.08), rgba(20, 21, 20, 0.28)),
+    url("/media/hong-kong-city.webp") center / cover no-repeat;
+}
+
+.identity {
+  position: absolute;
+  z-index: 20;
+  left: 5vw;
+  display: flex;
+  min-height: 100dvh;
+  flex-direction: column;
+  justify-content: center;
+  pointer-events: none;
+  text-shadow: 0 3px 30px rgba(6, 8, 10, 0.5);
+  will-change: transform, opacity, clip-path;
+}
+
+.identity h1,
+.identity h2,
+.identity p {
+  margin: 0;
+}
+
+.identity-name {
+  width: min(84vw, 1120px);
+  clip-path: inset(0 0 0 0);
+}
+
+.identity-name h1 {
+  max-width: 8ch;
+  font-family: var(--serif);
+  font-size: clamp(5.2rem, 11.5vw, 10.5rem);
+  font-weight: 500;
+  letter-spacing: -0.06em;
+  line-height: 0.88;
+}
+
+.identity-name p {
+  margin-top: 1.35rem;
+  color: rgba(240, 237, 231, 0.84);
+  font-size: clamp(0.92rem, 1.35vw, 1.2rem);
+  letter-spacing: 0.015em;
+}
+
+.identity-interests {
+  top: 1.5vh;
+  width: min(88vw, 1160px);
+  gap: 0.08em;
+  visibility: hidden;
+  opacity: 0;
+}
+
+.interests-kicker {
+  width: max-content;
+  margin-bottom: 0.7rem;
+  color: rgba(240, 237, 231, 0.72);
+  font-size: clamp(0.72rem, 1.05vw, 0.9rem);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  will-change: clip-path;
+}
+
+.interest {
+  width: max-content;
+  max-width: 100%;
+  font-family: var(--serif);
+  font-size: clamp(2.2rem, 5.1vw, 5.2rem);
+  letter-spacing: -0.045em;
+  line-height: 1.02;
+  will-change: clip-path;
+}
+
+.identity-stanford {
+  left: 7vw;
+  top: 1vh;
+  width: min(72vw, 900px);
+}
+
+/* Clip the lines, not the wrapper: `.identity` is 100dvh tall, so clipping it
+   sweeps mostly empty space and the text reads as popping in. Each line gets
+   its own max-content box so the reveal hugs the glyphs. */
+.identity-stanford h2,
+.identity-stanford p {
+  width: max-content;
+  max-width: 100%;
+  will-change: clip-path, transform;
+}
+
+.identity-stanford h2 {
+  font-family: var(--serif);
+  font-size: clamp(5rem, 9.8vw, 9rem);
+  font-weight: 500;
+  letter-spacing: -0.06em;
+  line-height: 0.88;
+}
+
+.identity-stanford p {
+  margin-top: 0.28em;
+  font-family: var(--serif);
+  font-size: clamp(2rem, 3.5vw, 3.4rem);
+  letter-spacing: -0.035em;
+}
+
+.social-links {
+  position: absolute;
+  z-index: 26;
+  right: 9vw;
+  bottom: 16vh;
+  display: flex;
+  gap: clamp(0.65rem, 1.7vw, 1.4rem);
+  pointer-events: auto;
+  will-change: clip-path;
+}
+
+/* Each icon animates itself; clipping the flex row instead would crawl across
+   the gaps between icons and make them pop one at a time. */
+.social-links a {
+  display: grid;
+  width: clamp(2.8rem, 4vw, 3.6rem);
+  aspect-ratio: 1;
+  place-items: center;
+  color: var(--paper);
+  text-decoration: none;
+  transition: color 180ms ease, transform 180ms ease;
+  will-change: transform, opacity;
+}
+
+.social-links svg {
+  width: 62%;
+  height: 62%;
+}
+
+.social-links a:hover,
+.social-links a:focus-visible {
+  color: var(--accent);
+  transform: translateY(-3px);
+}
+
+.social-links a:active,
+.project-link:active {
+  transform: translateY(1px);
+}
+
+.work-veil {
+  z-index: 30;
+  display: grid;
+  align-items: center;
+  padding: 7vw;
+  background: var(--ink);
+  will-change: transform;
+}
+
+.projects-section {
+  position: relative;
+  z-index: 34;
+  min-height: 100dvh;
+  padding: clamp(7rem, 11vw, 11rem) 6vw clamp(6rem, 10vw, 10rem);
+  background: var(--ink);
+}
+
+.projects-heading {
+  max-width: 920px;
+  margin-bottom: clamp(4rem, 8vw, 7rem);
+}
+
+.projects-heading h2 {
+  margin: 0;
+  font-family: var(--serif);
+  font-size: clamp(5.2rem, 11vw, 10rem);
+  font-weight: 500;
+  letter-spacing: -0.06em;
+  line-height: 0.88;
+}
+
+.projects-heading p {
+  max-width: 38ch;
+  margin: 1.5rem 0 0;
+  color: var(--paper-muted);
+  font-size: clamp(1rem, 1.6vw, 1.35rem);
+  line-height: 1.45;
+}
+
+.project-list {
+  border-top: 1px solid var(--line);
+}
+
+.project-link {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  min-height: clamp(6.5rem, 10vw, 10rem);
+  align-items: center;
+  border-bottom: 1px solid var(--line);
+  text-decoration: none;
+  transition: color 220ms ease, padding 300ms cubic-bezier(0.16, 1, 0.3, 1), background-color 220ms ease;
+}
+
+.project-link span {
+  font-family: var(--serif);
+  font-size: clamp(2.4rem, 5.8vw, 6rem);
+  letter-spacing: -0.045em;
+}
+
+.project-link svg {
+  width: clamp(1.6rem, 2.6vw, 2.4rem);
+  height: auto;
+  opacity: 0.42;
+  transition: opacity 220ms ease, transform 300ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.project-link:hover,
+.project-link:focus-visible {
+  padding-right: 1.2rem;
+  padding-left: 1.2rem;
+  background: rgba(240, 237, 231, 0.035);
+  color: var(--accent);
+}
+
+.project-link:hover svg,
+.project-link:focus-visible svg {
+  opacity: 1;
+  transform: translate(4px, -4px);
+}
+
+.site-footer {
+  display: flex;
+  min-height: 160px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2rem 6vw;
+  border-top: 1px solid var(--line);
+  background: var(--ink);
+  color: var(--paper-muted);
+  font-size: 0.85rem;
+}
+
+.site-footer span {
+  font-family: var(--serif);
+  color: var(--paper);
+  font-size: 1.05rem;
+}
+
+.site-footer a {
+  text-decoration: none;
+}
+
+.project-page {
+  min-height: 100dvh;
+  background:
+    radial-gradient(circle at 78% 24%, rgba(216, 155, 107, 0.11), transparent 26%),
+    var(--ink);
+}
+
+.project-page-content {
+  display: flex;
+  min-height: 100dvh;
+  flex-direction: column;
+  justify-content: center;
+  padding: 8rem 7vw 5rem;
+}
+
+.project-page-content h1 {
+  max-width: 12ch;
+  margin: 2.2rem 0 0;
+  font-family: var(--serif);
+  font-size: clamp(4.5rem, 12vw, 11rem);
+  font-weight: 500;
+  letter-spacing: -0.06em;
+  line-height: 0.88;
+}
+
+.project-page-content p {
+  max-width: 34ch;
+  margin: 2rem 0 0;
+  color: var(--paper-muted);
+  font-size: clamp(1rem, 1.6vw, 1.25rem);
+  line-height: 1.45;
+}
+
+.back-link {
+  display: inline-flex;
+  width: max-content;
+  align-items: center;
+  gap: 0.55rem;
+  color: var(--paper-muted);
+  text-decoration: none;
+}
+
+.back-link:hover,
+.back-link:focus-visible {
+  color: var(--paper);
+}
+
+.back-link svg {
+  width: 1.05rem;
+}
+
+@media (max-width: 767px) {
+  .site-nav {
+    min-height: 60px;
+    padding: 0 1.1rem;
+  }
+
+  .nav-links {
+    gap: 1rem;
+    font-size: 0.75rem;
+  }
+
+  .nav-links a:nth-child(2) {
+    display: none;
+  }
+
+  .cinematic-runway {
+    height: 820dvh;
+  }
+
+  .identity {
+    left: 1.25rem;
+    width: calc(100% - 2.5rem);
+  }
+
+  .identity-name h1 {
+    font-size: clamp(4.5rem, 24vw, 7rem);
+  }
+
+  .identity-name p {
+    max-width: 24ch;
+    line-height: 1.4;
+  }
+
+  .interest {
+    font-size: clamp(2rem, 9vw, 3.4rem);
+    line-height: 1.06;
+  }
+
+  .identity-stanford h2 {
+    font-size: clamp(4.6rem, 22vw, 7rem);
+  }
+
+  .identity-stanford p {
+    font-size: clamp(2rem, 9vw, 3.2rem);
+  }
+
+  .social-links {
+    right: auto;
+    bottom: 12vh;
+    left: 50%;
+    display: grid;
+    grid-template-columns: repeat(3, 3.2rem);
+    transform: translateX(-50%);
+  }
+
+  .social-links a {
+    width: 3.2rem;
+  }
+
+  .work-veil {
+    padding: 1.25rem;
+  }
+
+  .projects-section {
+    padding-right: 1.25rem;
+    padding-left: 1.25rem;
+  }
+
+  .projects-heading h2 {
+    font-size: clamp(4.6rem, 23vw, 7rem);
+  }
+
+  .project-link {
+    min-height: 6.4rem;
+  }
+
+  .project-link span {
+    font-size: clamp(2.1rem, 10vw, 3.2rem);
+  }
+
+  .site-footer {
+    min-height: 132px;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 0.7rem;
+    padding: 2rem 1.25rem;
+  }
+}
+
+/* The scrubbed film is the only intro path — there is deliberately no
+   reduced-motion variant. The loader keeps its instant transition for anyone
+   with reduced motion set. */
+@media (prefers-reduced-motion: reduce) {
+  .scene-loader {
+    transition: none;
+  }
+}

@@ -1,0 +1,32 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+build/
+
+# Vercel project link (contains project/org ids)
+.vercel
+
+# Source media, generation intermediates, and research scratch.
+# The finished intro encodes live in web/public/media/ and ARE tracked.
+higgsfield/
+output/
+tmp/
+prototype/
+notebooks/
+Personal_Website_Phase2/
+*.zip
+
+# Tooling caches
+.ruff_cache/
+__pycache__/
+*.pyc
+
+# Local agent config
+.claude/settings.local.json
+.mcp.json
+.agents/
+
+# OS
+.DS_Store
