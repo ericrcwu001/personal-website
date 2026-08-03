@@ -3,7 +3,10 @@
   "installCommand": "npm install --prefix web",
   "buildCommand": "npm run build --prefix web",
   "outputDirectory": "web/dist",
-  "rewrites": [{ "source": "/projects/:slug", "destination": "/index.html" }],
+  "rewrites": [
+    { "source": "/learn-smarter-build-carefully", "destination": "/learn-smarter-build-carefully/index.html" },
+    { "source": "/projects/:slug", "destination": "/index.html" }
+  ],
   "headers": [
     {
       "source": "/media/intro/(.*)",
