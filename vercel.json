@@ -4,7 +4,7 @@
   "buildCommand": "npm run build --prefix web",
   "outputDirectory": "web/dist",
   "rewrites": [
-    { "source": "/learn-smarter-build-carefully", "destination": "/learn-smarter-build-carefully/index.html" },
+    { "source": "/sep5-12-ai-class", "destination": "/sep5-12-ai-class/index.html" },
     { "source": "/projects/:slug", "destination": "/index.html" }
   ],
   "headers": [
