@@ -34,9 +34,9 @@ export const courseContent = {
       "A compact course for students who are already going to use AI. The goal is to help them learn from it, question it, and build with it without handing over their thinking.",
   },
   courseMeta: [
-    { label: "Course", value: "4-hour course" },
+    { label: "Length", value: "4 hours" },
     { label: "Audience", value: "Grades 8 and up" },
-    { label: "Dates", value: "Sep 5 and Sep 12" },
+    { label: "Format", value: "Two Saturdays" },
     { label: "Experience", value: "No coding required" },
   ],
   sessions: [
@@ -154,12 +154,12 @@ export const courseContent = {
       body:
         "A checked study artifact, a small prototype, test notes, and a record of what they verified or changed.",
     },
-    closing: {
+    contact: {
       mark: "Sep 5 + Sep 12",
-      title: "The outcome is confidence with responsibility.",
+      title: "Contact me about a seat.",
       body:
-        "Students leave with a practical loop for using AI: define the goal, provide trusted context, check the work, improve it, and explain it.",
-      cta: "Reserve a seat",
+        "If this sounds useful for your child, reach out and I can send the exact class details, setup notes, and availability.",
+      cta: "Contact Eric",
     },
   },
 } as const;

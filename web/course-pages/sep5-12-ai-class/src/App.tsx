@@ -3,7 +3,6 @@ import {
   MotionConfig,
   motion,
   useScroll,
-  useSpring,
   useTransform,
   type MotionValue,
 } from "motion/react";
@@ -59,14 +58,13 @@ function NotebookLMMark({ size = 46 }: LogoProps) {
   return (
     <svg
       aria-hidden="true"
+      focusable="false"
       fill="currentColor"
       height={size}
-      role="img"
       viewBox="0 0 24 24"
       width={size}
       xmlns="http://www.w3.org/2000/svg"
     >
-      <title>NotebookLM</title>
       <rect fill="#fff" height="24" rx="5" width="24" />
       <path
         d="M11.999 3.14C5.372 3.14 0 8.588 0 15.312v5.828h2.212v-.58c0-2.728 2.178-4.938 4.866-4.938 2.688 0 4.866 2.21 4.866 4.937v.581h2.212v-.58c0-3.967-3.17-7.18-7.078-7.18a6.966 6.966 0 00-4.086 1.318C4.2 12.262 6.687 10.59 9.56 10.59c4.057 0 7.347 3.338 7.347 7.453v3.097h2.212v-3.097c0-5.355-4.28-9.698-9.56-9.698a9.438 9.438 0 00-6.217 2.332C4.984 7.528 8.244 5.383 12 5.383c5.406 0 9.788 4.446 9.788 9.93v5.827H24v-5.828C23.999 8.588 18.627 3.14 11.999 3.14z"
@@ -82,13 +80,12 @@ function CodexMark({ size = 46 }: LogoProps) {
   return (
     <svg
       aria-hidden="true"
+      focusable="false"
       height={size}
-      role="img"
       viewBox="0 0 24 24"
       width={size}
       xmlns="http://www.w3.org/2000/svg"
     >
-      <title>Codex</title>
       <path
         d="M19.503 0H4.496A4.496 4.496 0 000 4.496v15.007A4.496 4.496 0 004.496 24h15.007A4.496 4.496 0 0024 19.503V4.496A4.496 4.496 0 0019.503 0z"
         fill="#fff"
@@ -112,13 +109,12 @@ function ClaudeCodeMark({ size = 46 }: LogoProps) {
   return (
     <svg
       aria-hidden="true"
+      focusable="false"
       height={size}
-      role="img"
       viewBox="0 0 24 24"
       width={size}
       xmlns="http://www.w3.org/2000/svg"
     >
-      <title>Claude Code</title>
       <path
         clipRule="evenodd"
         d="M20.998 10.949H24v3.102h-3v3.028h-1.487V20H18v-2.921h-1.487V20H15v-2.921H9V20H7.488v-2.921H6V20H4.487v-2.921H3V14.05H0V10.95h3V5h17.998v5.949zM6 10.949h1.488V8.102H6v2.847zm10.51 0H18V8.102h-1.49v2.847z"
@@ -331,19 +327,14 @@ function IntroFlowScrubbed() {
     target: ref,
     offset: ["start start", "end end"],
   });
-  const progress = useSpring(scrollYProgress, {
-    stiffness: 260,
-    damping: 30,
-    mass: 0.12,
-  });
-  const handoff = useTransform(progress, [0.22, 0.68], [0, 1]);
+  const handoff = useTransform(scrollYProgress, [0.22, 0.68], [0, 1]);
 
   const profileOpacity = useTransform(handoff, [0, 0.34, 0.72, 1], [1, 0.86, 0, 0]);
   const profileY = useTransform(handoff, [0, 1], [0, -88]);
   const profileScale = useTransform(handoff, [0, 1], [1, 0.965]);
 
   const reasonOpacity = useTransform(handoff, [0, 0.48, 0.86, 1], [0, 0, 1, 1]);
-  const reasonY = useTransform(handoff, [0, 1], [74, 0]);
+  const reasonY = useTransform(handoff, [0, 1], [58, -24]);
   const reasonScale = useTransform(handoff, [0, 1], [0.982, 1]);
 
   return (
@@ -450,14 +441,6 @@ function DossierCourseLayer({ style }: { style?: MotionDivStyle }) {
         ))}
       </div>
       <p className="artifact-safety">{sections.dossier.safety}</p>
-      <div className="artifact-tools" aria-label="Tools used in the course">
-        {tools.map((tool) => (
-          <span key={tool.name}>
-            {tool.logo}
-            {tool.name}
-          </span>
-        ))}
-      </div>
       <div className="artifact-session-grid">
         {sessions.map((session) => (
           <div key={session.date}>
@@ -492,47 +475,61 @@ function StaticLoopStep({ step, index }: { step: OwnershipStep; index: number })
 }
 
 function ToolsSection() {
+  const [activeToolId, setActiveToolId] = useState<ToolId>(tools[0].id);
+  const activeTool = tools.find((tool) => tool.id === activeToolId) ?? tools[0];
+
   return (
     <section className="tools-section" aria-labelledby="tools-title">
       <Reveal className="section-copy">
         <h2 id="tools-title">{sections.tools.title}</h2>
         <p>{sections.tools.body}</p>
       </Reveal>
-      <div className="tool-stack">
-        {tools.map((tool, index) => (
-          <ToolRow index={index} key={tool.name} tool={tool} />
-        ))}
-      </div>
+      <Reveal className="tool-console" delay={0.06}>
+        <div className="tool-tabs" role="tablist" aria-label="AI tools practiced in the class">
+          {tools.map((tool) => (
+            <button
+              aria-controls="tool-panel"
+              aria-selected={tool.id === activeTool.id}
+              className="tool-tab"
+              id={`tool-tab-${tool.id}`}
+              key={tool.id}
+              onClick={() => setActiveToolId(tool.id)}
+              role="tab"
+              type="button"
+            >
+              <span aria-hidden="true">{tool.logo}</span>
+              {tool.name}
+            </button>
+          ))}
+        </div>
+        <motion.article
+          animate={{ opacity: 1, y: 0 }}
+          aria-labelledby={`tool-tab-${activeTool.id}`}
+          className="tool-panel"
+          id="tool-panel"
+          initial={{ opacity: 0, y: 8 }}
+          key={activeTool.id}
+          role="tabpanel"
+          transition={{ duration: 0.22, ease: easing }}
+        >
+          <div className="tool-panel__identity">
+            <span className="tool-panel__logo">{activeTool.logo}</span>
+            <div>
+              <h3>{activeTool.name}</h3>
+              <p>{activeTool.label}</p>
+            </div>
+          </div>
+          <p className="tool-panel__body">{activeTool.body}</p>
+          <div className="tool-panel__chips" aria-label={`${activeTool.name} teaching focus`}>
+            {activeTool.teaches.map((item) => (
+              <span key={item}>{item}</span>
+            ))}
+          </div>
+        </motion.article>
+      </Reveal>
     </section>
   );
 }
-
-const ToolRow = memo(function ToolRow({ tool, index }: { tool: Tool; index: number }) {
-  return (
-    <Reveal delay={index * 0.07}>
-      <motion.article
-        className="tool-row"
-        whileHover={{ x: 8 }}
-        whileTap={{ scale: 0.99 }}
-        transition={{ duration: 0.24, ease: easing }}
-      >
-        <div className="tool-row__identity">
-          <span className="tool-row__logo">{tool.logo}</span>
-          <div>
-            <h3>{tool.name}</h3>
-            <p>{tool.label}</p>
-          </div>
-        </div>
-        <p className="tool-row__body">{tool.body}</p>
-        <div className="tool-row__chips" aria-label={`${tool.name} teaching focus`}>
-          {tool.teaches.map((item) => (
-            <span key={item}>{item}</span>
-          ))}
-        </div>
-      </motion.article>
-    </Reveal>
-  );
-});
 
 function CoursePlanSection() {
   return (
@@ -576,30 +573,34 @@ function CoursePlanSection() {
   );
 }
 
-function ClosingSection() {
+function ContactSection() {
   return (
-    <section className="closing" aria-labelledby="closing-title">
-      <Reveal className="closing__card">
-        <span className="closing__mark">{sections.closing.mark}</span>
-        <h2 id="closing-title">{sections.closing.title}</h2>
-        <p>{sections.closing.body}</p>
-        <div className="closing__dates">
-          {sessions.map((session) => (
-            <DateTile key={session.date} session={session} />
-          ))}
+    <section className="contact-section" aria-labelledby="contact-title">
+      <Reveal className="contact-panel">
+        <div>
+          <span className="contact__mark">{sections.contact.mark}</span>
+          <h2 id="contact-title">{sections.contact.title}</h2>
+          <p>{sections.contact.body}</p>
+          <a
+            className="primary-cta"
+            href={reserveHref}
+          >
+            {sections.contact.cta}
+            <ArrowRight size={18} weight="bold" aria-hidden="true" />
+          </a>
         </div>
-        <div className="safety-strip" aria-label="Safety and responsibility notes">
-          {safetyNotes.map((note) => (
-            <span key={note}>{note}</span>
-          ))}
+        <div>
+          <div className="contact__dates">
+            {sessions.map((session) => (
+              <DateTile key={session.date} session={session} />
+            ))}
+          </div>
+          <div className="safety-strip" aria-label="Safety and responsibility notes">
+            {safetyNotes.map((note) => (
+              <span key={note}>{note}</span>
+            ))}
+          </div>
         </div>
-        <a
-          className="primary-cta"
-          href={reserveHref}
-        >
-          {sections.closing.cta}
-          <ArrowRight size={18} weight="bold" aria-hidden="true" />
-        </a>
       </Reveal>
     </section>
   );
@@ -615,7 +616,7 @@ export default function App() {
         <IntroFlow />
         <ToolsSection />
         <CoursePlanSection />
-        <ClosingSection />
+        <ContactSection />
       </main>
     </MotionConfig>
   );
