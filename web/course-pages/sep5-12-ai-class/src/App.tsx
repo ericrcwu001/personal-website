@@ -430,7 +430,7 @@ function DossierCourseLayer({ style }: { style?: MotionDivStyle }) {
   return (
     <motion.div className="artifact-course" style={style}>
       <div className="artifact-course__top">
-        <span>Dates</span>
+        <span>Dates · {sections.dossier.time}</span>
         <strong>{sections.dossier.dates}</strong>
       </div>
       <div className="artifact-course__meta" aria-label="Course details">

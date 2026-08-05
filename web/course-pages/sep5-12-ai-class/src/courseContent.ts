@@ -127,6 +127,7 @@ export const courseContent = {
       kicker: "Course plan",
       title: "Learn smarter. Build carefully.",
       dates: "Sep 5 + Sep 12",
+      time: "10:00am–12:00pm",
       safety:
         "Supervised and age-appropriate: approved sources, no private student data, no APIs, no public deployment.",
       habitsKicker: "Five habits",
