@@ -32,6 +32,7 @@ body {
   margin: 0;
   min-width: 320px;
   overflow-x: clip;
+  isolation: isolate;
   background:
     linear-gradient(118deg, var(--accent-faint), transparent 34rem),
     linear-gradient(180deg, var(--bg), var(--bg-soft) 58%, #e8e2d6);
@@ -51,7 +52,19 @@ a {
 
 main {
   position: relative;
+  z-index: 1;
   overflow: clip;
+}
+
+.topology-background {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  display: block;
+  width: 100vw;
+  height: 100svh;
+  pointer-events: none;
+  opacity: 0.9;
 }
 
 .scroll-progress {
@@ -950,6 +963,10 @@ main {
 }
 
 @media (max-width: 720px) {
+  .topology-background {
+    opacity: 0.74;
+  }
+
   .intro-flow__sticky,
   .tools-section,
   .course-plan,
@@ -1115,5 +1132,11 @@ main {
 
   .primary-cta {
     width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .topology-background {
+    opacity: 0.64;
   }
 }

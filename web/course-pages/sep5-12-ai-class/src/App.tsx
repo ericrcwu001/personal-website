@@ -9,6 +9,7 @@ import {
 import { ArrowRight } from "@phosphor-icons/react/ArrowRight";
 import { CalendarBlank } from "@phosphor-icons/react/CalendarBlank";
 import { CheckCircle } from "@phosphor-icons/react/CheckCircle";
+import TopologyBackground from "./TopologyBackground";
 import {
   courseContent,
   type OwnershipStep,
@@ -608,9 +609,11 @@ function ContactSection() {
 
 export default function App() {
   const reducedMotion = useReducedMotionSetting();
+  const motionDisabled = useMotionDisabled();
 
   return (
     <MotionConfig reducedMotion={reducedMotion} transition={{ ease: easing }}>
+      <TopologyBackground disabled={motionDisabled} />
       <ScrollProgress />
       <main>
         <IntroFlow />
